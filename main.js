@@ -6,13 +6,13 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        icon: './scr/public/img/pc.png'
+        icon: './src/public/img/pc.png'
     })
 
     // Menu personalizado
     Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-    win.loadFile('./scr/views/index.html')
+    win.loadFile('./src/views/index.html')
 
 }
 
@@ -22,17 +22,32 @@ const aboutWindow = () => {
     const about = new BrowserWindow({
         width: 360,
         height: 220,
-        icon: './scr/public/img/pc.png',
+        icon: './src/public/img/pc.png',
         autoHideMenuBar: true,
         resizable: false
     })
 
-    about.loadFile('./scr/views/about.html')
+    about.loadFile('./src/views/about.html')
+}
+
+// Janela secundaria
+const childWindow = () => {
+    const father = BrowserWindow.getFocusedWindow()
+    if(father){
+        const child = new BrowserWindow({
+            width: 600,
+            height: 800,
+            icon: './src/public/img/pc.png',
+            parent: father,
+            modal: true
+        })
+
+        child.loadFile('./src/views/child.html')
+    }
 }
 
 app.whenReady().then(() => {
     createWindow() 
-    //aboutWindow()
 })
 
 // template Menu
@@ -40,7 +55,8 @@ const template = [
     {
         label: 'Arquivo',
         submenu: [
-            {label: 'Sair', click: () => app.quit(), accelerator: 'Alt+F4'}
+            {label: 'Sair', click: () => app.quit(), accelerator: 'Alt+F4'},
+            {label: 'Janela Secundaria', click: () => childWindow()}
         ]
     },
     {
