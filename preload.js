@@ -1,8 +1,11 @@
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
 // expondo informações que meu front pode acessar do meu back
 contextBridge.exposeInMainWorld('api', {
-    verElectron: () => process.versions.electron
+    verElectron: () => process.versions.electron,
+    open: () => ipcRenderer.send('open-child'),
+    send: (message) => ipcRenderer.send('render-message', message),
+    on: (message) => ipcRenderer.on('main-message', message)
 })
 
 // manipulação do DOM

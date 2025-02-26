@@ -1,6 +1,6 @@
 console.log('processo do back-end...')
 console.log(`Versão Electron: ${process.versions.electron}`)
-const { app, BrowserWindow, nativeTheme, Menu, shell } = require('electron')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require('electron')
 const path = require('node:path')
 
 const createWindow = () => {
@@ -52,7 +52,21 @@ const childWindow = () => {
 }
 
 app.whenReady().then(() => {
-    createWindow() 
+    createWindow()
+
+    // IPC
+
+    ipcMain.on('open-child', () =>{
+        childWindow()
+    })
+
+    ipcMain.on('render-message', (event, message) => {
+        console.log(message)
+        event.reply('main-message', 'Estou mandando essa reposta do back! ^^')
+    })
+
+
+    // END IPC
 })
 
 // template Menu
