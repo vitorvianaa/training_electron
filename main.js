@@ -1,12 +1,17 @@
-//console.log('processo principal iniciado...')
+console.log('processo do back-end...')
+console.log(`Versão Electron: ${process.versions.electron}`)
 const { app, BrowserWindow, nativeTheme, Menu, shell } = require('electron')
+const path = require('node:path')
 
 const createWindow = () => {
     nativeTheme.themeSource = "light"
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        icon: './src/public/img/pc.png'
+        icon: './src/public/img/pc.png',
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js')
+        }
     })
 
     // Menu personalizado
