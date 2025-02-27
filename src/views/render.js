@@ -15,3 +15,15 @@ api.send('Oi, estou mandando isso do front! ^^')
 api.on((event, message) => {
     console.log(message)
 })
+
+function info(){
+    api.info()
+}
+
+function warning(){
+    api.warning()
+}
+
+function select(){
+    api.select()
+}

@@ -1,6 +1,6 @@
 console.log('processo do back-end...')
 console.log(`Versão Electron: ${process.versions.electron}`)
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require('electron')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('node:path')
 
 const createWindow = () => {
@@ -63,6 +63,44 @@ app.whenReady().then(() => {
     ipcMain.on('render-message', (event, message) => {
         console.log(message)
         event.reply('main-message', 'Estou mandando essa reposta do back! ^^')
+    })
+    
+    ipcMain.on('dialog-info', () =>{
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Informação',
+            message: 'Mensagem',
+            buttons: ['OK']
+        })
+    })
+
+    ipcMain.on('dialog-warning', () => {
+        dialog.showMessageBox({
+            type: 'warning',
+            title: 'Aviso',
+            message: 'Confirma essa ação?',
+            buttons: ['Sim', 'Não'],
+            defaultId: 0
+        })
+        .then((result) => {
+            console.log(result)
+            
+            if(result.response === 0){
+                console.log('Confirmado!!')
+            }
+        })
+    })
+
+    ipcMain.on('dialog-select', () => {
+        dialog.showOpenDialog({
+            properties: ['openDirectory']
+        })
+        .then((result) => {
+            console.log(result.filePaths)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     })
 
 
